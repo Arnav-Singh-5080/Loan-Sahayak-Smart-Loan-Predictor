@@ -129,6 +129,14 @@ The model predicts whether a loan should be approved based on the
 applicant’s financial profile.
 """)
 
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 👤 Project Author")
+st.sidebar.write("**Arnav Singh**")
+st.sidebar.write("Machine Learning Enthusiast | Aspiring Data Scientist")
+st.sidebar.markdown("📧 Email: itsarnav.singh80@gmail.com")
+st.sidebar.markdown("[🔗 LinkedIn](https://www.linkedin.com/in/arnav-singh-a87847351)")
+st.sidebar.markdown("[💻 GitHub](https://github.com/Arnav-Singh-5080)")
+
 # -----------------------------------
 # Load Model
 # -----------------------------------
