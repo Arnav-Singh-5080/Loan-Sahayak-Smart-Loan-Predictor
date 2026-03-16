@@ -7,21 +7,27 @@ import numpy as np
 # Page Config
 # -----------------------------------
 st.set_page_config(
-    page_title="LoanSahayak (लोन सहायक) | NeuroNerds",
+    page_title="LoanSahayak (लोन सहायक)",
     page_icon="🏦",
     layout="wide"
 )
 
-#st.title("🏦 LoanSahayak (लोन सहायक)")
-#st.markdown("### Smart Loan Approval using Gaussian Naive Bayes")
-
-
 # -----------------------------------
-# PREMIUM HEADER SECTION
+# Button Styling
 # -----------------------------------
-
 st.markdown("""
 <style>
+.stButton>button {
+    background: linear-gradient(135deg,#00c6ff,#0072ff);
+    color:white;
+    border:none;
+    border-radius:8px;
+    height:45px;
+    font-size:16px;
+    font-weight:600;
+    width:100%;
+}
+
 .hero {
     text-align: center;
     padding: 60px 20px;
@@ -46,65 +52,109 @@ st.markdown("""
     margin-top: 15px;
     color: #d1d1d1;
 }
-</style>
 
+.section-card {
+    padding:12px;
+    border-radius:10px;
+    background:#f4f6f9;
+    font-weight:600;
+    font-size:18px;
+    margin-top:20px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# -----------------------------------
+# HERO HEADER
+# -----------------------------------
+
+st.markdown("""
 <div class="hero">
     <h1>🏦 LoanSahayak (लोन सहायक)</h1>
     <p>AI-Powered Smart Loan Approval System</p>
-    <div class="tagline">🚀 Developed by NeuroNerds</div>
+    <div class="tagline">AI-Powered Decision Intelligence for Smart Lending</div>
 </div>
 """, unsafe_allow_html=True)
 
 
-## ----------------------------------------------------------------------------------------------------
-# -----------------------------
-# Title Section
-# -----------------------------
-#st.markdown("<h1 style='text-align: center;'>🏦 LoanSahayak (लोन सहायक)</h1>", unsafe_allow_html=True)
-#st.markdown("<p class='team'>🚀 Developed by <b>NeuroNerds</b></p>", unsafe_allow_html=True)
-#st.markdown("<p style='text-align: center; color: gray;'>AI Driven Smart Credit Loan Approval System</p>", unsafe_allow_html=True)
-#st.write("")
-## ----------------------------------------------------------------------------------------------------
+# -----------------------------------
+# Sidebar Info
+# -----------------------------------
+
+st.sidebar.title("LoanSahayak")
+
+st.sidebar.info("""
+This AI system evaluates loan applications using financial indicators,
+credit score analysis, and risk assessment.
+
+The model predicts whether a loan should be approved based on the
+applicant’s financial profile.
+""")
+
 
 # -----------------------------------
-# Load Model & Scaler
+# Load Model
 # -----------------------------------
+
 model = pickle.load(open("loan_model.pkl", "rb"))
 scaler = pickle.load(open("scaler.pkl", "rb"))
 
-# -----------------------------------
-# EMI Calculator Function
-# -----------------------------------
-def calculate_emi(principal, tenure_months, annual_rate=10):
-    if principal == 0 or tenure_months == 0:
-        return 0
-    monthly_rate = annual_rate / 12 / 100
-    emi = (principal * monthly_rate * (1 + monthly_rate)**tenure_months) / \
-          ((1 + monthly_rate)**tenure_months - 1)
-    return emi
 
 # -----------------------------------
-# Input Section
+# EMI Calculator
 # -----------------------------------
-st.markdown("## 💼 Applicant Financial Details")
+
+def calculate_emi(principal, tenure_months, annual_rate=10):
+
+    if principal == 0 or tenure_months == 0:
+        return 0
+
+    monthly_rate = annual_rate / 12 / 100
+
+    emi = (principal * monthly_rate * (1 + monthly_rate)**tenure_months) / \
+          ((1 + monthly_rate)**tenure_months - 1)
+
+    return emi
+
+
+# -----------------------------------
+# Financial Details Section
+# -----------------------------------
+
+st.markdown('<div class="section-card">💼 Applicant Financial Details</div>', unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 
 with col1:
+
     applicant_income = st.number_input("Applicant Income (₹)", min_value=0, step=1000)
     coapplicant_income = st.number_input("Coapplicant Income (₹)", min_value=0, step=1000)
+
     loan_amount = st.number_input("Loan Amount (₹)", min_value=0, step=1000)
+
     credit_score = st.slider("Credit Score", 300, 900, 650)
+
     age = st.slider("Age", 18, 70, 30)
+
     dependents = st.number_input("Dependents", min_value=0)
+
     existing_loans = st.number_input("Existing Loans", min_value=0)
+
     savings = st.number_input("Savings (₹)", min_value=0, step=1000)
 
+
 with col2:
+
     collateral_value = st.number_input("Collateral Value (₹)", min_value=0, step=1000)
+
     loan_term = st.slider("Loan Term (Months)", 6, 360, 60)
 
-st.markdown("## 👤 Applicant Background Details")
+
+# -----------------------------------
+# Background Details Section
+# -----------------------------------
+
+st.markdown('<div class="section-card">👤 Applicant Background Details</div>', unsafe_allow_html=True)
 
 col3, col4 = st.columns(2)
 
@@ -115,6 +165,7 @@ with col3:
         "Salaried": 1,
         "Self-Employed": 2
     }
+
     employment_status = st.selectbox("Employment Status", list(employment_dict.keys()))
     employment_status = employment_dict[employment_status]
 
@@ -123,6 +174,7 @@ with col3:
         "Semi-Urban": 1,
         "Urban": 2
     }
+
     property_area = st.selectbox("Property Area", list(property_dict.keys()))
     property_area = property_dict[property_area]
 
@@ -132,8 +184,10 @@ with col3:
         "Education Loan": 2,
         "Personal Loan": 3
     }
+
     loan_purpose = st.selectbox("Loan Purpose", list(loan_purpose_dict.keys()))
     loan_purpose = loan_purpose_dict[loan_purpose]
+
 
 with col4:
 
@@ -141,6 +195,7 @@ with col4:
         "Not Graduate": 0,
         "Graduate": 1
     }
+
     education_level = st.selectbox("Education Level", list(education_dict.keys()))
     education_level = education_dict[education_level]
 
@@ -148,6 +203,7 @@ with col4:
         "Female": 0,
         "Male": 1
     }
+
     gender = st.selectbox("Gender", list(gender_dict.keys()))
     gender = gender_dict[gender]
 
@@ -156,19 +212,30 @@ with col4:
         "Government": 1,
         "Business Owner": 2
     }
+
     employer_category = st.selectbox("Employer Category", list(employer_category_dict.keys()))
     employer_category = employer_category_dict[employer_category]
 
+
 # -----------------------------------
-# Prediction Button
+# Prediction
 # -----------------------------------
+
 if st.button("🔎 Analyze Loan Application"):
 
     total_income = applicant_income + coapplicant_income
     emi = calculate_emi(loan_amount, loan_term)
+
     emi_ratio = emi / total_income if total_income > 0 else 0
 
+    # Applicant Summary
+    with st.expander("📋 Applicant Summary"):
+        st.write("Total Income:", total_income)
+        st.write("Loan Amount:", loan_amount)
+        st.write("Credit Score:", credit_score)
+
     input_data = pd.DataFrame([[
+
         applicant_income,
         coapplicant_income,
         loan_amount,
@@ -185,72 +252,84 @@ if st.button("🔎 Analyze Loan Application"):
         education_level,
         gender,
         employer_category
+
     ]], columns=[
+
         'Applicant_Income','Coapplicant_Income','Loan_Amount','Credit_Score',
         'Age','Dependents','Existing_Loans','Savings','Collateral_Value',
         'Loan_Term','Employment_Status','Property_Area','Loan_Purpose',
         'Education_Level','Gender','Employer_Category'
+
     ])
 
     scaled_data = scaler.transform(input_data)
+
     prediction = model.predict(scaled_data)
+
     probability = model.predict_proba(scaled_data)
+
 
     st.markdown("---")
     st.subheader("📊 Financial Analysis")
 
     colA, colB, colC = st.columns(3)
+
     colA.metric("Monthly EMI (₹)", f"{round(emi,2)}")
     colB.metric("Total Monthly Income (₹)", f"{total_income}")
     colC.metric("EMI / Income Ratio", f"{round(emi_ratio*100,2)} %")
 
+
     st.markdown("---")
-    st.subheader("🧠 AI Decision")
+
+    st.markdown("## 🧠 AI Decision Engine")
 
     approval_prob = probability[0][1] * 100
+
     st.progress(int(approval_prob))
 
+
     if prediction[0] == 1:
+
         st.success(f"✅ Loan Approved (Confidence: {round(approval_prob,2)}%)")
+
     else:
+
         st.error(f"❌ Loan Rejected (Confidence: {round(100-approval_prob,2)}%)")
+
 
     st.markdown("### 📌 Risk Assessment Insight")
 
     if emi_ratio > 0.5:
+
         st.warning("High EMI-to-Income ratio → Financial risk detected.")
+
     elif credit_score < 600:
+
         st.warning("Low credit score increases rejection probability.")
+
     elif existing_loans > 2:
+
         st.warning("Multiple existing loans increase default risk.")
+
     else:
+
         st.info("Applicant profile appears financially stable.")
 
+
 # -----------------------------------
-# MINIMAL PREMIUM FOOTER
+# Footer
 # -----------------------------------
 
 st.markdown("""
-<style>
-.footer-minimal {
-    margin-top: 80px;
-    padding: 25px 20px;
-    border-radius: 15px;
-    background: linear-gradient(135deg, #0f2027, #203a43);
-    color: #dcdcdc;
-    text-align: center;
-    font-size: 14px;
-    opacity: 0.85;
-}
-
-.footer-minimal hr {
-    margin: 15px 0;
-    border: 0.5px solid rgba(255,255,255,0.15);
-}
-</style>
-
-<div class="footer-minimal">
-    <hr>
-    © IDP 2026 • Developed by NeuroNerds • All Rights Reserved
+<div style="
+margin-top:80px;
+padding:25px;
+border-radius:15px;
+background:linear-gradient(135deg,#0f2027,#203a43);
+color:#dcdcdc;
+text-align:center;
+font-size:14px;
+opacity:0.85;">
+© 2026 LoanSahayak • All Rights Reserved
 </div>
-""", unsafe_allow_html=True) 
+""", unsafe_allow_html=True)
