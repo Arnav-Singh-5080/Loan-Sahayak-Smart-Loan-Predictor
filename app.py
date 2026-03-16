@@ -13,28 +13,43 @@ st.set_page_config(
 )
 
 # -----------------------------------
-# Button Styling
+# Premium UI Styling
 # -----------------------------------
 st.markdown("""
 <style>
+
+/* App background */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(180deg,#0f172a,#020617);
+    color: white;
+}
+
+/* Button */
 .stButton>button {
     background: linear-gradient(135deg,#00c6ff,#0072ff);
     color:white;
     border:none;
-    border-radius:8px;
-    height:45px;
+    border-radius:10px;
+    height:48px;
     font-size:16px;
     font-weight:600;
     width:100%;
+    transition:0.3s;
 }
 
+.stButton>button:hover {
+    transform:scale(1.03);
+    box-shadow:0px 4px 15px rgba(0,114,255,0.6);
+}
+
+/* Hero Section */
 .hero {
     text-align: center;
     padding: 60px 20px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    border-radius: 22px;
+    background: linear-gradient(135deg,#020617,#0f172a,#1e293b);
     color: white;
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.5);
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.6);
 }
 
 .hero h1 {
@@ -44,23 +59,47 @@ st.markdown("""
 
 .hero p {
     font-size: 20px;
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .tagline {
-    font-size: 16px;
+    font-size: 15px;
     margin-top: 15px;
-    color: #d1d1d1;
+    color: #94a3b8;
 }
 
+/* Section cards */
 .section-card {
-    padding:12px;
-    border-radius:10px;
-    background:#f4f6f9;
+    padding:14px;
+    border-radius:14px;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
     font-weight:600;
     font-size:18px;
-    margin-top:20px;
+    margin-top:28px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0px 6px 20px rgba(0,0,0,0.5);
 }
+
+/* Metrics */
+[data-testid="metric-container"] {
+    background: linear-gradient(135deg,#020617,#0f172a);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:12px;
+    border-radius:12px;
+    box-shadow:0px 4px 15px rgba(0,0,0,0.5);
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg,#020617,#0f172a);
+}
+
+/* Progress bar */
+.stProgress > div > div {
+    background: linear-gradient(90deg,#22c55e,#4ade80);
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -76,7 +115,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-
 # -----------------------------------
 # Sidebar Info
 # -----------------------------------
@@ -91,14 +129,12 @@ The model predicts whether a loan should be approved based on the
 applicant’s financial profile.
 """)
 
-
 # -----------------------------------
 # Load Model
 # -----------------------------------
 
 model = pickle.load(open("loan_model.pkl", "rb"))
 scaler = pickle.load(open("scaler.pkl", "rb"))
-
 
 # -----------------------------------
 # EMI Calculator
@@ -116,9 +152,8 @@ def calculate_emi(principal, tenure_months, annual_rate=10):
 
     return emi
 
-
 # -----------------------------------
-# Financial Details Section
+# Financial Details
 # -----------------------------------
 
 st.markdown('<div class="section-card">💼 Applicant Financial Details</div>', unsafe_allow_html=True)
@@ -126,32 +161,21 @@ st.markdown('<div class="section-card">💼 Applicant Financial Details</div>', 
 col1, col2 = st.columns(2)
 
 with col1:
-
     applicant_income = st.number_input("Applicant Income (₹)", min_value=0, step=1000)
     coapplicant_income = st.number_input("Coapplicant Income (₹)", min_value=0, step=1000)
-
     loan_amount = st.number_input("Loan Amount (₹)", min_value=0, step=1000)
-
     credit_score = st.slider("Credit Score", 300, 900, 650)
-
     age = st.slider("Age", 18, 70, 30)
-
     dependents = st.number_input("Dependents", min_value=0)
-
     existing_loans = st.number_input("Existing Loans", min_value=0)
-
     savings = st.number_input("Savings (₹)", min_value=0, step=1000)
 
-
 with col2:
-
     collateral_value = st.number_input("Collateral Value (₹)", min_value=0, step=1000)
-
     loan_term = st.slider("Loan Term (Months)", 6, 360, 60)
 
-
 # -----------------------------------
-# Background Details Section
+# Background Details
 # -----------------------------------
 
 st.markdown('<div class="section-card">👤 Applicant Background Details</div>', unsafe_allow_html=True)
@@ -160,62 +184,40 @@ col3, col4 = st.columns(2)
 
 with col3:
 
-    employment_dict = {
-        "Unemployed": 0,
-        "Salaried": 1,
-        "Self-Employed": 2
-    }
-
+    employment_dict = {"Unemployed":0,"Salaried":1,"Self-Employed":2}
     employment_status = st.selectbox("Employment Status", list(employment_dict.keys()))
     employment_status = employment_dict[employment_status]
 
-    property_dict = {
-        "Rural": 0,
-        "Semi-Urban": 1,
-        "Urban": 2
-    }
-
+    property_dict = {"Rural":0,"Semi-Urban":1,"Urban":2}
     property_area = st.selectbox("Property Area", list(property_dict.keys()))
     property_area = property_dict[property_area]
 
     loan_purpose_dict = {
-        "Home Loan": 0,
-        "Car Loan": 1,
-        "Education Loan": 2,
-        "Personal Loan": 3
+        "Home Loan":0,
+        "Car Loan":1,
+        "Education Loan":2,
+        "Personal Loan":3
     }
-
     loan_purpose = st.selectbox("Loan Purpose", list(loan_purpose_dict.keys()))
     loan_purpose = loan_purpose_dict[loan_purpose]
 
-
 with col4:
 
-    education_dict = {
-        "Not Graduate": 0,
-        "Graduate": 1
-    }
-
+    education_dict = {"Not Graduate":0,"Graduate":1}
     education_level = st.selectbox("Education Level", list(education_dict.keys()))
     education_level = education_dict[education_level]
 
-    gender_dict = {
-        "Female": 0,
-        "Male": 1
-    }
-
+    gender_dict = {"Female":0,"Male":1}
     gender = st.selectbox("Gender", list(gender_dict.keys()))
     gender = gender_dict[gender]
 
     employer_category_dict = {
-        "Private Sector": 0,
-        "Government": 1,
-        "Business Owner": 2
+        "Private Sector":0,
+        "Government":1,
+        "Business Owner":2
     }
-
     employer_category = st.selectbox("Employer Category", list(employer_category_dict.keys()))
     employer_category = employer_category_dict[employer_category]
-
 
 # -----------------------------------
 # Prediction
@@ -228,14 +230,12 @@ if st.button("🔎 Analyze Loan Application"):
 
     emi_ratio = emi / total_income if total_income > 0 else 0
 
-    # Applicant Summary
     with st.expander("📋 Applicant Summary"):
         st.write("Total Income:", total_income)
         st.write("Loan Amount:", loan_amount)
         st.write("Credit Score:", credit_score)
 
     input_data = pd.DataFrame([[
-
         applicant_income,
         coapplicant_income,
         loan_amount,
@@ -252,22 +252,17 @@ if st.button("🔎 Analyze Loan Application"):
         education_level,
         gender,
         employer_category
-
     ]], columns=[
-
         'Applicant_Income','Coapplicant_Income','Loan_Amount','Credit_Score',
         'Age','Dependents','Existing_Loans','Savings','Collateral_Value',
         'Loan_Term','Employment_Status','Property_Area','Loan_Purpose',
         'Education_Level','Gender','Employer_Category'
-
     ])
 
     scaled_data = scaler.transform(input_data)
 
     prediction = model.predict(scaled_data)
-
     probability = model.predict_proba(scaled_data)
-
 
     st.markdown("---")
     st.subheader("📊 Financial Analysis")
@@ -278,43 +273,28 @@ if st.button("🔎 Analyze Loan Application"):
     colB.metric("Total Monthly Income (₹)", f"{total_income}")
     colC.metric("EMI / Income Ratio", f"{round(emi_ratio*100,2)} %")
 
-
     st.markdown("---")
 
     st.markdown("## 🧠 AI Decision Engine")
 
     approval_prob = probability[0][1] * 100
-
     st.progress(int(approval_prob))
 
-
     if prediction[0] == 1:
-
         st.success(f"✅ Loan Approved (Confidence: {round(approval_prob,2)}%)")
-
     else:
-
         st.error(f"❌ Loan Rejected (Confidence: {round(100-approval_prob,2)}%)")
-
 
     st.markdown("### 📌 Risk Assessment Insight")
 
     if emi_ratio > 0.5:
-
         st.warning("High EMI-to-Income ratio → Financial risk detected.")
-
     elif credit_score < 600:
-
         st.warning("Low credit score increases rejection probability.")
-
     elif existing_loans > 2:
-
         st.warning("Multiple existing loans increase default risk.")
-
     else:
-
         st.info("Applicant profile appears financially stable.")
-
 
 # -----------------------------------
 # Footer
@@ -328,8 +308,7 @@ border-radius:15px;
 background:linear-gradient(135deg,#0f2027,#203a43);
 color:#dcdcdc;
 text-align:center;
-font-size:14px;
-opacity:0.85;">
+font-size:14px;">
 © 2026 LoanSahayak • All Rights Reserved
 </div>
 """, unsafe_allow_html=True)
