@@ -1,5 +1,13 @@
 # 🏦 LoanSahayak — AI Smart Loan Approval System
+<p align="center">
+  <img src="LoanSahayak.gif" width="700"/>
+</p>
 
+<p align="center">
+  🚀 End-to-End Machine Learning Project | 🌐 Live Deployment | 🤖 AI for Fintech
+</p>
+
+---
 ### End-to-End Machine Learning Project with Live Deployment
 
 LoanSahayak is an **AI-powered smart loan approval prediction system** that helps automate financial decision-making using Machine Learning.
