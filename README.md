@@ -4,11 +4,9 @@
 </p>
 
 <p align="center">
-  🚀 End-to-End Machine Learning Project | 🌐 Live Deployment | 🤖 AI for Fintech
+  End-to-End Machine Learning Project with Live Deployment
 </p>
 
----
-### End-to-End Machine Learning Project with Live Deployment
 
 LoanSahayak is an **AI-powered smart loan approval prediction system** that helps automate financial decision-making using Machine Learning.
 
