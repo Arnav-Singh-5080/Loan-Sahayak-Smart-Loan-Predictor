@@ -1,6 +1,6 @@
 # 🏦 LoanSahayak — AI Smart Loan Approval System
 <p align="center">
-  <img src="LoanSahayak.gif" width="700"/>
+  <img src="./LoanSahayak.gif" width="700"/>
 </p>
 
 <p align="center">
