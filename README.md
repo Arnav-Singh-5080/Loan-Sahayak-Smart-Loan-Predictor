@@ -1,7 +1,5 @@
 # 🏦 LoanSahayak — AI Smart Loan Approval System
-<p align="center">
-  <img src="./LoanSahayak.gif" width="700"/>
-</p>
+![LoanSahayak Demo](LoanSahayak.gif)
 
 <p align="center">
   End-to-End Machine Learning Project with Live Deployment
